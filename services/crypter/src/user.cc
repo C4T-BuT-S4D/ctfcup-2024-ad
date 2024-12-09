@@ -21,6 +21,9 @@ CrypterService::Register(::grpc::ServerContext *context,
 
     mpz_class P = random_prime(32);
     mpz_class Q = random_prime(32);
+    while (P == Q) {
+      Q = random_prime(32);
+    }
     mpz_class N = P * Q;
     mpz_class lambda = (P - 1) * (Q - 1);
     auto id = random_id();
