@@ -9,6 +9,7 @@ if True:
 
 from ark_lib import *
 from checklib import *  # type: ignore
+from pwn import PwnlibException
 
 
 class Checker(BaseChecker):
@@ -163,6 +164,12 @@ class Checker(BaseChecker):
             self.assert_eq(content, flag, "Flag mismatch", Status.CORRUPT)
 
         self.cquit(Status.OK)
+
+    def action(self, action, *args, **kwargs):
+        try:
+            super(Checker, self).action(action, *args, **kwargs)
+        except PwnlibException:
+            self.cquit(Status.DOWN, 'Connection error', 'Got pwnlib exception')
 
 
 if __name__ == '__main__':
