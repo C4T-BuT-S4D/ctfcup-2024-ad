@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT * FROM files WHERE owner_id = $1",
+  "query": "SELECT * FROM files WHERE path = $1 AND owner_id = $2",
   "describe": {
     "columns": [
       {
@@ -15,22 +15,28 @@
       },
       {
         "ordinal": 2,
+        "name": "quota_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 3,
         "name": "path",
         "type_info": "Varchar"
       },
       {
-        "ordinal": 3,
+        "ordinal": 4,
         "name": "size",
-        "type_info": "Int8"
+        "type_info": "Int4"
       },
       {
-        "ordinal": 4,
+        "ordinal": 5,
         "name": "created_at",
         "type_info": "Timestamptz"
       }
     ],
     "parameters": {
       "Left": [
+        "Text",
         "Int4"
       ]
     },
@@ -39,8 +45,9 @@
       false,
       false,
       false,
+      false,
       false
     ]
   },
-  "hash": "c70831c895f8654143fabcb65173ac33bf2d8185917b83e3b0adf3dc62b8ddc2"
+  "hash": "008171667d7855be41cbb8ba9184cdbc2c133a7ff0596c1522ef411b28a348df"
 }

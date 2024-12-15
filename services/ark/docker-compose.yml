@@ -2,12 +2,14 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:15
+    image: postgres:17-alpine
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: ark
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
 
   app:
     build: .
@@ -19,7 +21,8 @@ services:
     ports:
       - "13345:13345"
     volumes:
-      - ./files:/files
+      - ark_files:/files
 
 volumes:
   postgres_data:
+  ark_files:

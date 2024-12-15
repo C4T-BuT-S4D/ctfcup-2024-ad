@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT * FROM files WHERE created_at < $1",
+  "query": "SELECT * FROM files WHERE path = $1",
   "describe": {
     "columns": [
       {
@@ -36,7 +36,7 @@
     ],
     "parameters": {
       "Left": [
-        "Timestamptz"
+        "Text"
       ]
     },
     "nullable": [
@@ -48,5 +48,5 @@
       false
     ]
   },
-  "hash": "1c5ed8800559566fa57294dcc907f7013fd1329899af78694621ae314f511bdd"
+  "hash": "8a5e8b2374085e57abd5fa0b689e4750512123f16a8830a56b7d7bc9b468ee26"
 }

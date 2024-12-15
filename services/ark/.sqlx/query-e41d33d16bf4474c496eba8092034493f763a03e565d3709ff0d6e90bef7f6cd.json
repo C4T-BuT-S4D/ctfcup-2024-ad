@@ -21,7 +21,12 @@
       {
         "ordinal": 3,
         "name": "quota_used",
-        "type_info": "Int8"
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "created_at",
+        "type_info": "Timestamptz"
       }
     ],
     "parameters": {
@@ -31,6 +36,7 @@
       ]
     },
     "nullable": [
+      false,
       false,
       false,
       false,
