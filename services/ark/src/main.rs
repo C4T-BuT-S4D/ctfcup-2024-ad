@@ -61,7 +61,7 @@ impl App {
             .unwrap_or("postgres://postgres:postgres@localhost:5432/ark".to_string());
 
         let db = PgPoolOptions::new()
-            .max_connections(5)
+            .max_connections(1)
             .connect(&db_url)
             .await
             .context("Failed to connect to database")?;
@@ -380,12 +380,14 @@ impl App {
         .fetch_all(&self.db)
         .await?;
 
+        log::info!("Cleaning up {} old files", files.len());
+
         for file in files {
             let mut tx = self.db.begin().await?;
             if let Err(e) = fs::remove_file(&file.path)
                 && e.kind() != std::io::ErrorKind::NotFound
             {
-                eprintln!("Failed to remove file {}: {}", file.path, e);
+                log::error!("Failed to remove file {}: {}", file.path, e);
             }
             sqlx::query!("DELETE FROM files WHERE id = $1", file.id)
                 .execute(&mut *tx)
@@ -394,7 +396,7 @@ impl App {
             sqlx::query!(
                 "UPDATE users SET quota_used = quota_used - $1 WHERE id = $2",
                 file.size,
-                file.owner_id
+                file.quota_id
             )
             .execute(&mut *tx)
             .await?;
@@ -454,22 +456,6 @@ async fn run_app_with_streams(
 ) -> Result<()> {
     let mut app = App::new().await.context("Failed to create app")?;
 
-    // Start cleanup task
-    let cleanup_db = app.db.clone();
-    tokio::spawn(async move {
-        let mut interval = tokio::time::interval(std::time::Duration::from_secs(60));
-        loop {
-            interval.tick().await;
-            let app = App {
-                db: cleanup_db.clone(),
-                current_user: None,
-            };
-            if let Err(e) = app.cleanup_old_files().await {
-                eprintln!("Cleanup error: {}", e);
-            }
-        }
-    });
-
     app.print_menu().await;
 
     let mut buf = String::new();
@@ -504,6 +490,7 @@ async fn run_app_with_streams(
             Err(e) => {
                 let error_msg = format!("Error: {}\n", e);
                 stdout.write_all(error_msg.as_bytes()).await?;
+                eprintln!("Error: {}", e);
                 continue;
             }
         }
@@ -521,6 +508,18 @@ async fn main() -> Result<()> {
         // Child process - use stdio
         return run_app_with_streams(tokio::io::stdin(), tokio::io::stdout()).await;
     }
+
+    let app = App::new().await.context("Failed to create app")?;
+    tokio::spawn(async move {
+        let mut interval = tokio::time::interval(std::time::Duration::from_secs(60));
+        loop {
+            interval.tick().await;
+            log::info!("Cleaning up old files");
+            if let Err(e) = app.cleanup_old_files().await {
+                log::error!("Cleanup error: {}", e);
+            }
+        }
+    });
 
     // Set up SIGTERM handler
     let mut sigterm = signal(SignalKind::terminate())?;

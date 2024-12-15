@@ -1,19 +1,19 @@
-version: '3.8'
+version: '2.4'
 
 services:
   db:
     image: postgres:17-alpine
+    restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: ark
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5435:5432"
-
+    command: postgres -c max_connections=1000
+    
   app:
     build: .
-    platform: linux/amd64
+    restart: unless-stopped
     depends_on:
       - db
     environment:
@@ -22,6 +22,26 @@ services:
       - "13345:13345"
     volumes:
       - ark_files:/files
+    pids_limit: 16384
+    ulimits:
+      nproc: 16384
+      nofile:
+        soft: 1048576
+        hard: 1048576
+      memlock:
+        soft: 1048576
+        hard: 1048576
+    sysctls:
+      net.core.somaxconn: 16384
+      net.ipv4.tcp_max_syn_backlog: 16384
+      net.ipv4.tcp_max_tw_buckets: 16384
+      net.ipv4.tcp_tw_reuse: 1
+      net.ipv4.tcp_fin_timeout: 10
+      net.ipv4.tcp_keepalive_time: 120
+      net.ipv4.tcp_keepalive_intvl: 10
+      net.ipv4.tcp_keepalive_probes: 5
+    cpus: 2
+    mem_limit: 2048M
 
 volumes:
   postgres_data:
