@@ -49,6 +49,7 @@ CONTAINER_ALLOWED_OPTIONS = CONTAINER_REQUIRED_OPTIONS + [
     "privileged",
     "security_opt",
     "ulimits",
+    "command",
 ]
 SERVICE_REQUIRED_OPTIONS = ["pids_limit", "mem_limit", "cpus"]
 SERVICE_ALLOWED_OPTIONS = CONTAINER_ALLOWED_OPTIONS
@@ -105,8 +106,7 @@ def generate_flag(name):
 def colored_log(*messages, color: ColorType = ColorType.INFO):
     ts = datetime.utcnow().isoformat(sep=" ", timespec="milliseconds")
     print(
-        f"{color}{color.name} [{current_thread().name} {ts}]{
-            ColorType.ENDC}", *messages
+        f"{color}{color.name} [{current_thread().name} {ts}]{ColorType.ENDC}", *messages
     )
 
 
@@ -194,17 +194,14 @@ class Checker(BaseValidator):
         err_s = err.rstrip("\n")
 
         self._log(
-            f"action: {action}\ntime: {elapsed:.2f}s\nstdout:\n{
-                out_s}\nstderr:\n{err_s}"
+            f"action: {action}\ntime: {elapsed:.2f}s\nstdout:\n{out_s}\nstderr:\n{err_s}"
         )
         self._fatal(
             p.returncode != 124,
-            f"action {action}: bad return code: 124, probably {
-                ColorType.BOLD}timeout{ColorType.ENDC}",
+            f"action {action}: bad return code: 124, probably {ColorType.BOLD}timeout{ColorType.ENDC}",
         )
         self._fatal(
-            p.returncode == 101, f"action {
-                action}: bad return code: {p.returncode}"
+            p.returncode == 101, f"action {action}: bad return code: {p.returncode}"
         )
         return out, err
 
@@ -338,11 +335,11 @@ class StructureValidator(BaseValidator):
         path = f.relative_to(BASE_DIR)
 
         if f.name not in ALLOWED_YAML_FILES:
-            self._error(f.suffix != ".yaml", f"file {
-                        path} has .yaml extension")
+            self._error(f.suffix != ".yaml",
+                        f"file {path} has .yaml extension")
 
-        self._error(f.name != ".gitkeep", f"{
-                    path} found, should be named .keep")
+        self._error(f.name != ".gitkeep",
+                    f"{path} found, should be named .keep")
 
         if f.name == "docker-compose.yml":
             with f.open() as file:
@@ -365,14 +362,13 @@ class StructureValidator(BaseValidator):
                 try:
                     dc_version = float(dc["version"])
                 except ValueError:
-                    self._error(False, f"version option in {
-                                path} is not float")
+                    self._error(
+                        False, f"version option in {path} is not float")
                     return
 
                 self._error(
                     2.4 <= dc_version < 3,
-                    f"invalid version in {path}, need >=2.4 and <3 (or no version at all), got {
-                        dc_version}",
+                    f"invalid version in {path}, need >=2.4 and <3 (or no version at all), got {dc_version}",
                 )
 
             for opt in dc:
@@ -402,35 +398,30 @@ class StructureValidator(BaseValidator):
                 for opt in CONTAINER_REQUIRED_OPTIONS:
                     self._error(
                         opt in container_conf,
-                        f"required option {opt} not in {
-                            path} for container {container}",
+                        f"required option {opt} not in {path} for container {container}",
                     )
 
                 self._error(
                     "restart" in container_conf
                     and container_conf["restart"] == "unless-stopped",
-                    f'restart option in {path} for container {
-                        container} must be equal to "unless-stopped"',
+                    f'restart option in {path} for container {container} must be equal to "unless-stopped"',
                 )
 
                 for opt in container_conf:
                     self._error(
                         opt in CONTAINER_ALLOWED_OPTIONS,
-                        f"option {opt} in {
-                            path} is not allowed for container {container}",
+                        f"option {opt} in {path} is not allowed for container {container}",
                     )
 
                 if self._error(
                     "image" not in container_conf or "build" not in container_conf,
-                    f"both image and build options in {
-                        path} for container {container}",
+                    f"both image and build options in {path} for container {container}",
                 ):
                     continue
 
                 if self._error(
                     "image" in container_conf or "build" in container_conf,
-                    f"both image and build options not in {
-                        path} for container {container}",
+                    f"both image and build options not in {path} for container {container}",
                 ):
                     continue
 
@@ -449,8 +440,8 @@ class StructureValidator(BaseValidator):
                             dockerfile = f.parent / context / "Dockerfile"
 
                     if self._error(
-                        dockerfile.exists(), f"no dockerfile found in {
-                            dockerfile}"
+                        dockerfile.exists(
+                        ), f"no dockerfile found in {dockerfile}"
                     ):
                         continue
 
@@ -487,31 +478,27 @@ class StructureValidator(BaseValidator):
                     for opt in SERVICE_REQUIRED_OPTIONS:
                         self._error(
                             opt in container_conf,
-                            f"required option {opt} not in {
-                                path} for service {container}",
+                            f"required option {opt} not in {path} for service {container}",
                         )
 
                     for opt in container_conf:
                         self._error(
                             opt in SERVICE_ALLOWED_OPTIONS,
-                            f"option {opt} in {
-                                path} is not allowed for service {container}",
+                            f"option {opt} in {path} is not allowed for service {container}",
                         )
 
             for service in services:
                 for database in databases:
                     self._warning(
                         service in dependencies and database in dependencies[service],
-                        f"service {service} may need to depends_on database {
-                            database}",
+                        f"service {service} may need to depends_on database {database}",
                     )
 
             for proxy in proxies:
                 for service in services:
                     self._warning(
                         proxy in dependencies and service in dependencies[proxy],
-                        f"proxy {proxy} may need to depends_on service {
-                            service}",
+                        f"proxy {proxy} may need to depends_on service {service}",
                     )
 
         elif BASE_DIR / "checkers" in f.parents and f.suffix == ".py":
