@@ -250,6 +250,10 @@ impl App {
             .context("Failed to query file")?
             .ok_or_else(|| eyre!("File not found"))?;
 
+        if file.quota_id == current_user.id {
+            bail!("Cannot copy file to self");
+        }
+
         sqlx::query!(
             "INSERT INTO files (owner_id, quota_id, path, size) VALUES ($1, $2, $3, $4)",
             file.owner_id,
@@ -260,6 +264,15 @@ impl App {
         .execute(&mut *tx)
         .await
         .context("Failed to insert new file record")?;
+
+        sqlx::query!(
+            "UPDATE users SET quota_used = quota_used + $1 WHERE id = $2",
+            file.size,
+            current_user.id
+        )
+        .execute(&mut *tx)
+        .await
+        .context("Failed to update user quota")?;
 
         tokio::fs::copy(&file.path, new_path)
             .await
@@ -311,10 +324,14 @@ impl App {
 
     async fn list_files(&self) -> Result<()> {
         if let Some(user) = &self.current_user {
-            let files = sqlx::query_as!(File, "SELECT * FROM files WHERE quota_id = $1", user.id)
-                .fetch_all(&self.db)
-                .await
-                .context("Failed to query user files")?;
+            let files = sqlx::query_as!(
+                File,
+                "SELECT * FROM files WHERE quota_id = $1 ORDER BY created_at DESC LIMIT 50",
+                user.id
+            )
+            .fetch_all(&self.db)
+            .await
+            .context("Failed to query user files")?;
 
             println!("Your files:");
             for file in files {
@@ -330,7 +347,16 @@ impl App {
     async fn suggest_users(&self) -> Result<()> {
         let users = sqlx::query_as!(
             SuggestedUser,
-            "SELECT users.username, users.created_at, COUNT(files.id) AS file_count, SUM(files.size) AS file_size FROM users INNER JOIN files ON users.id = files.owner_id GROUP BY users.id ORDER BY users.created_at DESC LIMIT 50"
+            "SELECT \
+                users.username, \
+                users.created_at, \
+                COUNT(files.id) AS file_count, \
+                SUM(files.size) AS file_size \
+            FROM users \
+            INNER JOIN files ON users.id = files.quota_id \
+            GROUP BY users.id \
+            ORDER BY users.created_at DESC \
+            LIMIT 50"
         )
         .fetch_all(&self.db)
         .await

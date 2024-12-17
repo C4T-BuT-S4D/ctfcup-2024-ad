@@ -13,6 +13,7 @@ services:
     
   app:
     build: .
+    platform: linux/amd64
     restart: unless-stopped
     depends_on:
       - db
@@ -26,9 +27,6 @@ services:
     ulimits:
       nproc: 16384
       nofile:
-        soft: 1048576
-        hard: 1048576
-      memlock:
         soft: 1048576
         hard: 1048576
     sysctls:

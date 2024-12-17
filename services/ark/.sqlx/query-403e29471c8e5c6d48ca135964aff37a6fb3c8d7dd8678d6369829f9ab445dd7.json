@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT users.username, users.created_at, COUNT(files.id) AS file_count, SUM(files.size) AS file_size FROM users INNER JOIN files ON users.id = files.owner_id GROUP BY users.id ORDER BY users.created_at DESC LIMIT 50",
+  "query": "SELECT users.username, users.created_at, COUNT(files.id) AS file_count, SUM(files.size) AS file_size FROM users INNER JOIN files ON users.id = files.quota_id GROUP BY users.id ORDER BY users.created_at DESC LIMIT 50",
   "describe": {
     "columns": [
       {
@@ -34,5 +34,5 @@
       null
     ]
   },
-  "hash": "9d57c60ddc9453b94eade5808206270b01d590697aa26d677504c5ed68c9f4ab"
+  "hash": "403e29471c8e5c6d48ca135964aff37a6fb3c8d7dd8678d6369829f9ab445dd7"
 }

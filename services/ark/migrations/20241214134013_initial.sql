@@ -22,6 +22,6 @@ CREATE TABLE IF NOT EXISTS files (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-CREATE INDEX IF NOT EXISTS files_owner_id_idx ON files (owner_id, created_at);
-CREATE INDEX IF NOT EXISTS files_quota_id_idx ON files (quota_id, created_at);
+CREATE INDEX IF NOT EXISTS files_owner_id_idx ON files (owner_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS files_quota_id_idx ON files (quota_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS files_created_at_idx ON files (created_at DESC);
