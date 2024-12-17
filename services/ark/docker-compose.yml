@@ -13,7 +13,6 @@ services:
     
   app:
     build: .
-    platform: linux/amd64
     restart: unless-stopped
     depends_on:
       - db
