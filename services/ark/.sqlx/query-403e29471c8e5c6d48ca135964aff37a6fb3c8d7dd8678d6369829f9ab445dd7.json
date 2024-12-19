@@ -1,0 +1,38 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT users.username, users.created_at, COUNT(files.id) AS file_count, SUM(files.size) AS file_size FROM users INNER JOIN files ON users.id = files.quota_id GROUP BY users.id ORDER BY users.created_at DESC LIMIT 50",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "username",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 2,
+        "name": "file_count",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 3,
+        "name": "file_size",
+        "type_info": "Int8"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      null,
+      null
+    ]
+  },
+  "hash": "403e29471c8e5c6d48ca135964aff37a6fb3c8d7dd8678d6369829f9ab445dd7"
+}

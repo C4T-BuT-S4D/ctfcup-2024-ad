@@ -48,6 +48,8 @@ CONTAINER_ALLOWED_OPTIONS = CONTAINER_REQUIRED_OPTIONS + [
     "sysctls",
     "privileged",
     "security_opt",
+    "ulimits",
+    "command",
 ]
 SERVICE_REQUIRED_OPTIONS = ["pids_limit", "mem_limit", "cpus"]
 SERVICE_ALLOWED_OPTIONS = CONTAINER_ALLOWED_OPTIONS
@@ -213,8 +215,10 @@ class Checker(BaseValidator):
         cmd = [str(self._exe_path), "put", HOST, flag_id, flag, str(vuln)]
         out, err = self._run_command(cmd)
 
-        self._fatal(len(out) <= 1024, "returned stdout is longer than 1024 characters")
-        self._fatal(len(err) <= 1024, "returned stderr is longer than 1024 characters")
+        self._fatal(len(out) <= 1024,
+                    "returned stdout is longer than 1024 characters")
+        self._fatal(len(err) <= 1024,
+                    "returned stderr is longer than 1024 characters")
 
         if self._attack_data:
             self._fatal(out, "stdout is empty")
@@ -241,7 +245,8 @@ class Checker(BaseValidator):
 
         for vuln in range(1, self._vulns + 1):
             flag = generate_flag(self._name)
-            flag_id = self.put(flag=flag, flag_id=secrets.token_hex(16), vuln=vuln)
+            flag_id = self.put(
+                flag=flag, flag_id=secrets.token_hex(16), vuln=vuln)
             flag_id = flag_id.strip()
             self.get(flag, flag_id, vuln)
 
@@ -330,9 +335,11 @@ class StructureValidator(BaseValidator):
         path = f.relative_to(BASE_DIR)
 
         if f.name not in ALLOWED_YAML_FILES:
-            self._error(f.suffix != ".yaml", f"file {path} has .yaml extension")
+            self._error(f.suffix != ".yaml",
+                        f"file {path} has .yaml extension")
 
-        self._error(f.name != ".gitkeep", f"{path} found, should be named .keep")
+        self._error(f.name != ".gitkeep",
+                    f"{path} found, should be named .keep")
 
         if f.name == "docker-compose.yml":
             with f.open() as file:
@@ -355,7 +362,8 @@ class StructureValidator(BaseValidator):
                 try:
                     dc_version = float(dc["version"])
                 except ValueError:
-                    self._error(False, f"version option in {path} is not float")
+                    self._error(
+                        False, f"version option in {path} is not float")
                     return
 
                 self._error(
@@ -426,12 +434,14 @@ class StructureValidator(BaseValidator):
                     else:
                         context = build["context"]
                         if "dockerfile" in build:
-                            dockerfile = f.parent / context / build["dockerfile"]
+                            dockerfile = f.parent / \
+                                context / build["dockerfile"]
                         else:
                             dockerfile = f.parent / context / "Dockerfile"
 
                     if self._error(
-                        dockerfile.exists(), f"no dockerfile found in {dockerfile}"
+                        dockerfile.exists(
+                        ), f"no dockerfile found in {dockerfile}"
                     ):
                         continue
 
@@ -496,7 +506,8 @@ class StructureValidator(BaseValidator):
             for p in ALLOWED_CHECKER_PATTERNS:
                 checker_code = checker_code.replace(p, "")
             for p in FORBIDDEN_CHECKER_PATTERNS:
-                self._error(p not in checker_code, f'forbidden pattern "{p}" in {path}')
+                self._error(p not in checker_code,
+                            f'forbidden pattern "{p}" in {path}')
 
     def __str__(self):
         return f"Structure validator for {self._service.name}"

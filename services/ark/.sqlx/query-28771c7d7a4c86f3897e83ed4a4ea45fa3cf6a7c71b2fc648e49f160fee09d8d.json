@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO files (owner_id, quota_id, path, size) VALUES ($1, $1, $2, $3)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int4",
+        "Varchar",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "28771c7d7a4c86f3897e83ed4a4ea45fa3cf6a7c71b2fc648e49f160fee09d8d"
+}
