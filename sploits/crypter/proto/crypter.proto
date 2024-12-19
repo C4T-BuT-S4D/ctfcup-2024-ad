@@ -1,0 +1,47 @@
+syntax = "proto3";
+package crypter;
+
+message RegisterRequest { string username = 1; }
+
+message RegisterResponse {
+  string token = 1;
+  string n = 2;
+  string lamba = 3;
+}
+
+message SendMessageRequest {
+  string token = 1;
+  string username = 2;
+  string message = 3;
+}
+
+message SendMessageResponse { string id = 1; }
+
+message ListMessagesRequest { string token = 1; }
+
+message ListMessagesResponse { repeated string id = 1; }
+
+message GetMessageRequest { string id = 1; }
+
+message GetMessageResponse {
+  string username = 1;
+  string from_username = 2;
+  string encrypted = 3;
+}
+
+message GetUserPublicKeyRequest { string username = 1; }
+
+message GetUserPublicKeyResponse { string n = 1; }
+
+service Crypter {
+  rpc Register(RegisterRequest) returns (RegisterResponse) {}
+
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse) {}
+
+  rpc ListMessages(ListMessagesRequest) returns (ListMessagesResponse) {}
+
+  rpc GetMessage(GetMessageRequest) returns (GetMessageResponse) {}
+
+  rpc GetUserPublicKey(GetUserPublicKeyRequest)
+      returns (GetUserPublicKeyResponse) {}
+}
