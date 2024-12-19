@@ -103,7 +103,6 @@ class DocsLib:
             f"{self.api_url}/documents/{doc_id}",
             json=document
         )
-        print(response.text)
         self.c.assert_eq(response.status_code, 200, 'Failed to update document', status=status)
         return self.c.get_json(response, 'Failed to create document: invalid JSON', status=status)
 
@@ -124,7 +123,6 @@ class DocsLib:
         response = session.get(f"{self.api_url}/documents",
                                params={'query': query}
                                )
-        print(response.text)
         self.c.assert_eq(response.status_code, 200, 'Failed to search', status=status)
         return self.c.get_json(response, 'Failed to search: invalid JSON', status=status)
 

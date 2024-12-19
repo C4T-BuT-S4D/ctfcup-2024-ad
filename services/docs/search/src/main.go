@@ -43,17 +43,16 @@ func (app *searchApp) handleSearch(c *fiber.Ctx) error {
 
 	orgID := qs["org_id"]
 	q := qs["q"]
+	if orgID == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "org_id is required",
+		})
+	}
 
-	// if orgID == "" {
-	// 	return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-	// 		"error": "org_id is required",
-	// 	})
-	// }
-	queries := []query.Query{}
-	if orgID != "" {
-		orgIdQ := bleve.NewMatchQuery(orgID)
-		orgIdQ.SetField("org_id")
-		queries = append(queries, orgIdQ)
+    orgIdQ := bleve.NewMatchQuery(orgID)
+	orgIdQ.SetField("org_id")
+	queries := []query.Query{
+	    orgIdQ,
 	}
     if q != "" {
     	queries = append(queries, bleve.NewMatchQuery(q))

@@ -103,18 +103,21 @@ class Checker(BaseChecker):
 
     def put(self, flag_id: str, flag: str, vuln: str):
         session = checklib.get_initialized_session()
-        org_id = self.get_random_org()
+        org = self.get_random_org()
 
-        response = self.lib.create_org(session, org_id)
+        response = self.lib.create_org(session, org)
         token = response.get('token')
+        org_id = response.get('id')
 
         self.assert_eq(bool(self.token_regexp.fullmatch(token)), True, 'Invalid token format')
+        self.assert_eq(bool(self.token_regexp.fullmatch(org_id)), True, 'Invalid org_id format')
+
 
         u, p = rnd_username(), rnd_password()
         self.lib.create_user(session, u, p, token)
 
         sess = checklib.get_initialized_session()
-        u = f'{u}@{org_id}'
+        u = f'{u}@{org}'
         self.lib.login(sess, u, p)
         title = checklib.rnd_string(10)
         created_doc = self.lib.create_doc(sess, title, flag)
@@ -122,7 +125,7 @@ class Checker(BaseChecker):
         doc_id = created_doc.get('id')
         self.assert_eq(bool(self.token_regexp.fullmatch(doc_id)), True, 'Invalid docid format')
 
-        self.cquit(Status.OK, doc_id, f"{token}:{u}:{p}:{doc_id}")
+        self.cquit(Status.OK, f'{org}:{org_id}:{doc_id}', f"{token}:{u}:{p}:{doc_id}")
 
     def get(self, flag_id: str, flag: str, vuln: str):
         token, u, p, doc_id = flag_id.split(':')
