@@ -20,8 +20,6 @@ services:
   app:
     build: .
     restart: unless-stopped
-    depends_on:
-      - db
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432/ark
     ports:
