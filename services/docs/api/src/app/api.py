@@ -163,18 +163,7 @@ async def get_document_text(doc_id: str, user = fastapi.Depends(get_current_user
             status_code=fastapi.status.HTTP_403_FORBIDDEN,
             detail=json_error('forbidden')
         )
-    return fastapi.responses.FileResponse(path=doc.content, filename=f"{doc.title}.txt", media_type='text/plain')
-
-# @api.get('/document/{doc_id}/pdf')
-# async def get_document_pdf(doc_id: str, user = fastapi.Depends(get_current_user)):
-#     doc = await must_get_doc(doc_id)
-#     if doc.organization_id != user.organization_id:
-#         raise fastapi.HTTPException(
-#             status_code=fastapi.status.HTTP_403_FORBIDDEN,
-#             detail=json_error('forbidden')
-#         )
-
-
+    return fastapi.responses.Response(content=doc.content, media_type='text/plain', headers={'Content-Disposition': f'attachment; filename="{doc.title}.md"'})
 
 
 @api.get('/documents')

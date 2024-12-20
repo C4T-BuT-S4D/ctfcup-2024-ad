@@ -1,0 +1,1 @@
+import{h as l}from"./index-client.CkyIVMoC.js";function c(s,a){var t=s.__className,e=r(a);l&&s.className===e?s.__className=e:(t!==e||l&&s.className!==e)&&(a==null?s.removeAttribute("class"):s.className=e,s.__className=e)}function r(s){return s??""}function _(s){return function(...a){var t=a[0];return t.preventDefault(),s==null?void 0:s.apply(this,a)}}export{_ as p,c as s};
