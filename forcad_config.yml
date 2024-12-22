@@ -1,0 +1,101 @@
+game:
+  mode: classic
+  round_time: 60
+  start_time: 2024-12-21 11:00:00
+  timezone: Europe/Moscow
+  default_score: 2500
+  flag_lifetime: 10
+  game_hardness: 15.0
+  inflation: true
+
+tasks:
+- checker: aquarius/checker.py
+  checker_timeout: 10
+  checker_type: pfr
+  gets: 1
+  name: aquarius
+  places: 1
+  puts: 1
+- checker: crypter/checker.py
+  checker_timeout: 15
+  checker_type: pfr
+  gets: 1
+  name: crypter
+  places: 1
+  puts: 1
+- checker: docs/checker.py
+  checker_timeout: 15
+  checker_type: pfr
+  gets: 1
+  name: docs
+  places: 1
+  puts: 1
+- checker: ark/checker.py
+  checker_timeout: 15
+  checker_type: pfr
+  gets: 1
+  name: ark
+  places: 1
+  puts: 1
+
+teams:
+- ip: 10.80.0.2
+  name: NPC
+  highlighted: false
+- ip: 10.80.1.2
+  name: pwn is 0x12c bucks
+  highlighted: false
+- ip: 10.80.2.2
+  name: dtl
+  highlighted: false
+- ip: 10.80.3.2
+  name: SIGAN
+  highlighted: false
+- ip: 10.80.4.2
+  name: EXE.1sior
+  highlighted: false
+- ip: 10.80.5.2
+  name: Red Cadets
+  highlighted: false
+- ip: 10.80.6.2
+  name: cR4.sh
+  highlighted: false
+- ip: 10.80.7.2
+  name: Drovosec
+  highlighted: false
+- ip: 10.80.8.2
+  name: CUT
+  highlighted: false
+- ip: 10.80.9.2
+  name: qual3nc3
+  highlighted: false
+- ip: 10.80.10.2
+  name: ITMOteam
+  highlighted: false
+- ip: 10.80.11.2
+  name: 4Ray
+  highlighted: false
+- ip: 10.80.12.2
+  name: KA4KAHAPCKuE CyXAPuKu
+  highlighted: false
+- ip: 10.80.13.2
+  name: mstuca
+  highlighted: false
+- ip: 10.80.14.2
+  name: Omsk_Tulula
+  highlighted: false
+- ip: 10.80.15.2
+  name: smiley-from-telega
+  highlighted: false
+- ip: 10.80.16.2
+  name: LCD
+  highlighted: false
+- ip: 10.80.17.2
+  name: VDNKh
+  highlighted: false
+- ip: 10.80.18.2
+  name: NONAme13
+  highlighted: false
+- ip: 10.80.19.2
+  name: Aqu4r1um
+  highlighted: false
