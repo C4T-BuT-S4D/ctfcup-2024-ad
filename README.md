@@ -1,18 +1,27 @@
-# ad-boilerplate
+[![check-services](https://github.com/C4T-BuT-S4D/ctfcup-2024-ad/actions/workflows/check-services.yml/badge.svg?branch=master&event=push)](https://github.com/C4T-BuT-S4D/ctfcup-2023-ad/actions/workflows/check-services.yml)
 
-[![check-services](https://github.com/C4T-BuT-S4D/ad-boilerplate/actions/workflows/check-services.yml/badge.svg?branch=master&event=push)](https://github.com/C4T-BuT-S4D/ad-boilerplate/actions/workflows/check-services.yml)
+# CTF Cup 2024
 
-Development workflow:
+The contest was held on December 21, 2024.
 
-1. Create branch named `$SERVICE`.
-2. Write your code in `services/$SERVICE`, `checkers/$SERVICE`, `sploits/$SERVICE` and `internal/$SERVICE` (if needed). 
-3. Validate your service with `SERVICE=$SERVICE ./check.py validate`. 
-4. Up your service with `SERVICE=$SERVICE ./check.py up`. 
-5. Check your service with `SERVICE=$SERVICE RUNS=200 ./check.py check`. 
-6. Down your service with `SERVICE=$SERVICE ./check.py down`. 
-7. Push your code and create pull request to master branch.
+Repository contains source code of services, checkers and sploits.
 
-Don't forget to:
-1. Add your checker requirements to `checkers/requirements.txt`. 
-2. Use `dedcleaner` container to delete old files if needed. Example can be found in `services/example/docker-compose.yml`. 
-3. Add info about your checker to `Checker` class. Example can be found in `checkers/example/checker.py`, line 11.
+## Results
+
+![Top](scoreboard/top.png)
+
+[Full scoreboard](scoreboard/full.png)
+
+## Services
+
+| Service                            | Language    | Checker                       | Sploits                      | Authors                                  |
+|------------------------------------|-------------|-------------------------------|------------------------------|------------------------------------------|
+| **[aquarius](services/aquarius/)** | C++         | [Checker](checkers/aquarius/) | [Sploits](sploits/aquarius/) | [@falamous](https://github.com/falamous) |
+| **[crypter](services/crypter/)**   | C++         | [Checker](checkers/crypter/)  | [Sploits](sploits/crypter/)  | [@falamous](https://github.com/falamous) |
+| **[docs](services/docs/)**         | Python & Go | [Checker](checkers/docs/)     | [Sploits](sploits/docs/)     | [@jnovikov](https://github.com/jnovikov) |
+| **[ark](services/ark/)**           | Rust        | [Checker](checkers/ark/)      | [Sploits](sploits/ark/)      | [@jnovikov](https://github.com/ark)      |
+
+## Infrastructure
+
+- DevOps: [@pomo_mondreganto](https://github.com/pomo-mondreganto)
+- Checksystem: [ForcAD](https://github.com/pomo-mondreganto/ForcAD),
