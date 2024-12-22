@@ -14,12 +14,12 @@ Repository contains source code of services, checkers and sploits.
 
 ## Services
 
-| Service                            | Language    | Checker                       | Sploits                      | Authors                                  |
-|------------------------------------|-------------|-------------------------------|------------------------------|------------------------------------------|
-| **[aquarius](services/aquarius/)** | C++         | [Checker](checkers/aquarius/) | [Sploits](sploits/aquarius/) | [@falamous](https://github.com/falamous) |
-| **[crypter](services/crypter/)**   | C++         | [Checker](checkers/crypter/)  | [Sploits](sploits/crypter/)  | [@falamous](https://github.com/falamous) |
-| **[docs](services/docs/)**         | Python & Go | [Checker](checkers/docs/)     | [Sploits](sploits/docs/)     | [@jnovikov](https://github.com/jnovikov) |
-| **[ark](services/ark/)**           | Rust        | [Checker](checkers/ark/)      | [Sploits](sploits/ark/)      | [@jnovikov](https://github.com/ark)      |
+| Service                            | Language    | Checker                       | Sploits                      | Authors                                                  |
+|------------------------------------|-------------|-------------------------------|------------------------------|----------------------------------------------------------|
+| **[aquarius](services/aquarius/)** | C++         | [Checker](checkers/aquarius/) | [Sploits](sploits/aquarius/) | [@falamous](https://github.com/falamous)                 |
+| **[crypter](services/crypter/)**   | C++         | [Checker](checkers/crypter/)  | [Sploits](sploits/crypter/)  | [@falamous](https://github.com/falamous)                 |
+| **[docs](services/docs/)**         | Python & Go | [Checker](checkers/docs/)     | [Sploits](sploits/docs/)     | [@jnovikov](https://github.com/jnovikov)                 |
+| **[ark](services/ark/)**           | Rust        | [Checker](checkers/ark/)      | [Sploits](sploits/ark/)      | [@pomo-mondreganto](https://github.com/pomo-mondreganto) |
 
 ## Infrastructure
 
