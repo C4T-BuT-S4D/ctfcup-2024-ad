@@ -1,4 +1,4 @@
-[![check-services](https://github.com/C4T-BuT-S4D/ctfcup-2024-ad/actions/workflows/check-services.yml/badge.svg?branch=master&event=push)](https://github.com/C4T-BuT-S4D/ctfcup-2023-ad/actions/workflows/check-services.yml)
+[![check-services](https://github.com/C4T-BuT-S4D/ctfcup-2024-ad/actions/workflows/check-services.yml/badge.svg?branch=master)](https://github.com/C4T-BuT-S4D/ctfcup-2024-ad/actions/workflows/check-services.yml)
 
 # CTF Cup 2024
 
